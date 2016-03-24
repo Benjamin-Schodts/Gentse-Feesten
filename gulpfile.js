@@ -14,15 +14,20 @@ var git = require('gulp-git');
 gulp.task('build', function (callback) {
   runSequence('clean:dist', 
     ['sass', 'useref', 'images', 'fonts'],
-    'add',
-    'commit',
-    'push',
     callback
   )
 })
 
 gulp.task('default', function (callback) {
   runSequence(['sass','browserSync', 'watch'],
+    callback
+  )
+})
+
+gulp.task('deploy', function (callback) {
+  runSequence('add',
+    'commit',
+    'push',
     callback
   )
 })
@@ -83,7 +88,6 @@ gulp.task('watch', ['browserSync', 'sass'], function (){
 })
 
 // Run git init 
-// src is the root folder for git to initialize 
 gulp.task('init', function(){
   git.init(function (err) {
     if (err) throw err;
@@ -101,7 +105,6 @@ gulp.task('add', function(){
 });
  
 // Run git commit 
-// src are the files to commit (or ./*) 
 gulp.task('commit', function(){
 	return gulp.src(['./app',
     	'./dist',
@@ -112,86 +115,16 @@ gulp.task('commit', function(){
 });
  
 // Run git remote add 
-// remote is the remote repo 
-// repo is the https url of the repo 
 gulp.task('addremote', function(){
   git.addRemote('origin', 'https://github.com/Benjamin-Schodts/project-one.git', function (err) {
     if (err) throw err;
   });
 });
- 
-// Run git remote remove 
-// remote is the remote repo 
-gulp.task('removeremote', function(){
-  git.removeRemote('origin', function (err) {
-    if (err) throw err;
-  });
-});
- 
+
 // Run git push 
-// remote is the remote repo 
-// branch is the remote branch to push to 
 gulp.task('push', function(){
   git.push('origin', 'master', function (err) {
     if (err) throw err;
-  });
-});
- 
-// Run git pull 
-// remote is the remote repo 
-// branch is the remote branch to pull from 
-gulp.task('pull', function(){
-  git.pull('origin', 'master', {args: '--rebase'}, function (err) {
-    if (err) throw err;
-  });
-});
- 
-// Run git fetch 
-// Fetch refs from origin 
-gulp.task('fetch', function(){
-  git.fetch('origin', '', function (err) {
-    if (err) throw err;
-  });
-});
- 
-// Clone a remote repo 
-gulp.task('clone', function(){
-  git.clone('https://github.com/Benjamin-Schodts/project-one.git', function (err) {
-    if (err) throw err;
-  });
-});
- 
-// Checkout a git branch 
-gulp.task('checkout', function(){
-  git.checkout('branchName', function (err) {
-    if (err) throw err;
-  });
-});
- 
-// Merge branches to master 
-gulp.task('merge', function(){
-  git.merge('branchName', function (err) {
-    if (err) throw err;
-  });
-});
- 
-// Reset a commit 
-gulp.task('reset', function(){
-  git.reset('SHA', function (err) {
-    if (err) throw err;
-  });
-});
- 
-// Git rm a file or folder 
-gulp.task('rm', function(){
-  return gulp.src('./gruntfile.js')
-    .pipe(git.rm());
-});
- 
-// Git clean files 
-gulp.task('clean', function() {
-  git.clean({ args: '-f' }, function (err) {
-    if(err) throw err;
   });
 });
  
