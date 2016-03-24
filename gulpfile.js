@@ -90,18 +90,25 @@ gulp.task('init', function(){
     if (err) throw err;
   });
 });
- 
-// Run git add 
-// src is the file(s) to add (or ./*) 
+
+// Run git add with options 
 gulp.task('add', function(){
-  return gulp.src('./*')
-    .pipe(git.add());
+    return gulp.src(['./app',
+    	'./dist',
+    	'./gulpfile.js',
+    	'./package.json'],
+    	 {base: './project'})
+    .pipe(git.add({args: '-f'}));
 });
  
 // Run git commit 
 // src are the files to commit (or ./*) 
 gulp.task('commit', function(){
-  return gulp.src('./*')
+	return gulp.src(['./app',
+    	'./dist',
+    	'./gulpfile.js',
+    	'./package.json'],
+    	 {base: './project'})
     .pipe(git.commit('automatic commit'));
 });
  
