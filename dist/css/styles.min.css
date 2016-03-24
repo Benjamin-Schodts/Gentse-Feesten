@@ -1,0 +1,11 @@
+.testing {
+  display: flex;
+  width: 71.42857%; }
+
+body {
+  background: red; }
+
+html {
+	width: 100%;
+	height: 100%;
+}
