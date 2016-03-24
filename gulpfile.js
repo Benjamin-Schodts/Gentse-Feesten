@@ -123,7 +123,7 @@ gulp.task('addremote', function(){
 
 // Run git push 
 gulp.task('push', function(){
-  git.push('origin', 'master', function (err) {
+  git.push('origin', 'gh-pages', function (err) {
     if (err) throw err;
   });
 });
