@@ -93,7 +93,7 @@ gulp.task('init', function(){
 
 // Run git add with options 
 gulp.task('add', function(){
-    return gulp.src(['./app',
+    return gulp.src(['./app/*',
     	'./dist',
     	'./gulpfile.js',
     	'./package.json'],
@@ -104,7 +104,7 @@ gulp.task('add', function(){
 // Run git commit 
 // src are the files to commit (or ./*) 
 gulp.task('commit', function(){
-	return gulp.src(['./app',
+	return gulp.src(['./app/*',
     	'./dist',
     	'./gulpfile.js',
     	'./package.json'],
