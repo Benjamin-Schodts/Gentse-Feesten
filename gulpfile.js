@@ -14,6 +14,9 @@ var git = require('gulp-git');
 gulp.task('build', function (callback) {
   runSequence('clean:dist', 
     ['sass', 'useref', 'images', 'fonts'],
+    'add',
+    'commit',
+    'push',
     callback
   )
 })
@@ -78,10 +81,6 @@ gulp.task('watch', ['browserSync', 'sass'], function (){
   gulp.watch('app/*.html', browserSync.reload); 
   gulp.watch('app/js/**/*.js', browserSync.reload); 
 })
-
-
-
-
 
 // Run git init 
 // src is the root folder for git to initialize 
