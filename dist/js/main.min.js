@@ -49,7 +49,7 @@ $(document).ready(function () {
 	  xhr.send();
 	}
 
-	
+
 	$("#button1").click(function () {
 	   //$.getJSON('http://api.opencultuurdata.nl/v0/openbeelden/4558763df1b233a57f0176839dc572e9e8726a02',
 	    $.getJSON('http://www.uitinnoordholland.nl/api/agenda/plaatsen',
@@ -61,15 +61,33 @@ $(document).ready(function () {
 	});
 
 	$("#button2").click(function () {
-		makeCorsRequest();
-		//$("#movielist").append(JSON.stringify(myJson, null, "\t"));
-		/*
-		$.each( myJson.media_urls, function( key, value ) {
-			if(value.content_type === "video/mp4"){
-				$("#movielist").append("<video src=" + value.url + " controls>Your browser does not support the video tag.</video><br>");
-			}
-		});
-*/
+
+
+		jQuery.support.cors = true;
+		$.ajax({
+		    url: "http://www.uitinnoordholland.nl/api/agenda/plaatsen",
+		    type: "GET",
+		    timeout: 30000,
+		    dataType: "text/plain", // "xml", "json"
+		    success: function(data) {
+		        // show text reply as-is (debug)
+		        alert(data);
+
+		        // show xml field values (debug)
+		        //alert( $(data).find("title").text() );
+
+		        // loop JSON array (debug)
+		        //var str="";
+		        //$.each(data.items, function(i,item) {
+		        //  str += item.title + "\n";
+		        //});
+		        //alert(str);
+		    },
+		    error: function(jqXHR, textStatus, ex) {
+		        alert(textStatus + "," + ex + "," + jqXHR.responseText);
+		    }
+});
+
 	});
 
 
