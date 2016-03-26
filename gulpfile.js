@@ -51,8 +51,8 @@ gulp.task('images', function(){
 });
 
 gulp.task('json', function() {
-	return gulp.src('app/js/*.json')
-	.pipe(gulp.dest('dist/js'))
+	return gulp.src('app/json/*.json')
+	.pipe(gulp.dest('dist/json'))
 })
 
 gulp.task('useref', function(){
