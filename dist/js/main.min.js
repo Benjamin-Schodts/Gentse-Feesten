@@ -3,7 +3,7 @@ $(document).ready(function () {
 	var list = [];
 
 	$("#button1").click(function () {
-	    $.getJSON('js/gentsefeestenevents.json',
+	    $.getJSON('json/gentsefeestenevents.json',
 
 
 	    function (data) {
@@ -24,7 +24,7 @@ $(document).ready(function () {
 	    });
 	});
 	$("#button2").click(function () {
-	    $.getJSON('js/gentsefeestenevents.json',
+	    $.getJSON('json/gentsefeestenevents.json',
 
 
 	    function (data) {
