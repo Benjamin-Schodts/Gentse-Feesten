@@ -2,17 +2,71 @@ $(document).ready(function () {
 	var myJson;
 	var list = [];
 
-	$.getJSON('json/gentsefeestenevents.json',
-	    function (data) {
+	$.getJSON('json/gentsefeestenevents.json', function (data) {
+    	myJson = data;
+    	$.each(myJson, function(key,val){
+		   	if(val.id == "12433"){
+		   		var str = [];
+		   		str = val.categorie_naam.split(">");
+		   		if(str.length > 1) {
+		   			$(".c-category-text").text(str[0]);
+		   			$('.c-category').append('<p class="sub-category">' + str[1] + '</p>');
+		   		} else {
+		   			$(".c-category-text").text(str[0]);
+		   			$('.sub-category').text('');
+		   		}
+				$(".c-title-text").text(val.titel.substring(0, 60));
+		   	}
+		   	
+		});
+	});
+
+	$('.c-right').click(
+	  function() {
+	    $.getJSON('json/gentsefeestenevents.json', function (data) {
 	    	myJson = data;
 	    	$.each(myJson, function(key,val){
-			   	if(val.id == "12433"){
-			   		$(".c-category-text").text(val.categorie_naam);
-					$(".c-title-text").text(val.titel);
+			   	if(val.id == "12500"){
+			   		var str = [];
+			   		str = val.categorie_naam.split(">");
+			   		if(str.length > 1) {
+			   			$(".c-category-text").text(str[0]);
+			   			$('.c-category').append('<p class="sub-category">' + str[1] + '</p>');
+			   		} else {
+			   			$(".c-category-text").text(str[0]);
+			   			$('.sub-category').text('');
+			   		}
+					$(".c-title-text").text(val.titel.substring(0, 60));
 			   	}
 			   	
 			});
-	    });
+		});
+	  }
+	)
+
+	$('.c-left').click(
+	  function() {
+	    $.getJSON('json/gentsefeestenevents.json', function (data) {
+	    	myJson = data;
+	    	$.each(myJson, function(key,val){
+			   	if(val.id == "12433"){
+			   		var str = [];
+			   		str = val.categorie_naam.split(">");
+			   		if(str.length > 1) {
+			   			$(".c-category-text").text(str[0]);
+			   			$('.c-category').append('<p class="sub-category">' + str[1] + '</p>');
+			   		} else {
+			   			$(".c-category-text").text(str[0]);
+			   			$('.sub-category').text('');
+			   		}
+					$(".c-title-text").text(val.titel.substring(0, 60));
+			   	}
+			   	
+			});
+		});
+	  }
+	)
+
 	
 
 	$("#button1").click(function () {

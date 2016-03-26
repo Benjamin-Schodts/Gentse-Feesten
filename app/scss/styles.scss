@@ -49,6 +49,7 @@ footer {
 	width: 400px;
 	height: 450px;
 	background: #c40021;
+	background-image: repeating-linear-gradient(45deg, #ab001d 0px, #ab001d 25px, #c40021 25px, #c40021 50px, #ab001d 50px);
 	position: relative;
 	-webkit-border-radius: 20px;
 	-moz-border-radius: 20px;
@@ -61,6 +62,12 @@ footer {
 .c-category {
 	font-size: 40px;
 	padding: 15px 0 0 40px;
+	height: 45px;
+}
+
+.c-category .sub-category {
+	font-size: 14px;
+	margin:	0 0 0 60px;
 }
 
 .c-category-text {
@@ -119,6 +126,10 @@ footer {
 	font-size: 40px;
 	z-index: 1;
 	cursor: pointer;
+}
+
+.button:focus {
+	outline: none;
 }
 
 .c-left {
