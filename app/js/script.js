@@ -2,6 +2,19 @@ $(document).ready(function () {
 	var myJson;
 	var list = [];
 
+	$.getJSON('json/gentsefeestenevents.json',
+	    function (data) {
+	    	myJson = data;
+	    	$.each(myJson, function(key,val){
+			   	if(val.id == "12433"){
+			   		$(".c-category-text").text(val.categorie_naam);
+					$(".c-title-text").text(val.titel);
+			   	}
+			   	
+			});
+	    });
+	
+
 	$("#button1").click(function () {
 	    $.getJSON('json/gentsefeestenevents.json',
 

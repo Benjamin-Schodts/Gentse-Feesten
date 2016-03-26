@@ -2,7 +2,7 @@ $(document).ready(function () {
 	var myJson;
 
 	$("#button1").click(function () {
-	    $.getJSON('js/gentsefeestenevents.json',
+	    $.getJSON('json/gentsefeestenevents.json',
 
 
 	    function (data) {
