@@ -3,4 +3,30 @@
   width: 71.42857%; }
 
 body {
-  background: red; }
+  background: red;
+  background: url("../images/gentse-feesten-bg.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat; }
+
+#body {
+  padding-bottom: 175px; }
+
+#site-container {
+  min-height: 100%;
+  position: relative; }
+
+#menu-logo {
+  width: 300px;
+  height: 175px;
+  background: url("../images/gentse-feesten-logo.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  display: inline-block; }
+
+footer {
+  height: 175px;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  text-align: center; }
