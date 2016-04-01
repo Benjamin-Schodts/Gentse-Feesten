@@ -4,10 +4,8 @@
 }
 
 body {
-	background: red;
-    background: url("../images/gentse-feesten-bg.jpg");
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
+	
+    margin: 0;
 }
 
 #body {
@@ -17,10 +15,58 @@ body {
 #site-container {
 	min-height: 100%;
 	position: relative;
+	
 }
 
-#movielist {
-	padding-left: 100px;
+.category-container {
+	background: #be0000;
+    padding: 15px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.categories {
+	list-style-type: none;
+	-webkit-column-count: 3; /* Chrome, Safari, Opera */
+    -moz-column-count: 3; /* Firefox */
+    column-count: 3;
+    -webkit-column-gap: 20px; /* Chrome, Safari, Opera */
+    -moz-column-gap: 20px; /* Firefox */
+    column-gap: 20px;
+}
+
+.category-entry {
+	line-height: 30px;
+}
+
+.category-entry a{
+	color: #00bebe;
+}
+
+.dates {
+	list-style-type: none;
+}
+
+.dates li {
+	float: left;
+	margin-left: 31px;
+	cursor: pointer;
+}
+
+.title {
+	font: 600 116px/116px 'Open Sans', sans-serif;
+	display: table-cell;
+	vertical-align: middle;
+	color: #fff;
+}
+
+.top {
+	width: 100%;
+	height: 50%;
+	background: url("../images/top-bg.jpg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    display: table;
 }
 
 #menu-logo {
