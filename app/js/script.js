@@ -15,26 +15,36 @@ $(document).ready(function () {
 
 	$('.categories').on('click','.category-entry a',function() {
 		$("#events").text("");
-		for (i = 0; i < list.length; i++) { 
-			if(list[i][0] == $(this).text()) {
-				var str = "<tr><td>" + list[i][1] + "</td>"
-				//var str = "<tr><td>" + list[i][0] + "</td><td>" + list[i][1] + "</td><td><table class='table'>";
-				//for (j = 0; j < list[i][2].length; j++) { 
-				//	var start = new Date(list[i][2][j] * 1000);
-				//	str += "<tr><th>" + weekday[start.getDay()] + " (" + start.getDate() + ")</th></th><td>" + list[i][3][j] + "</td>";
-				//}
-				str += /*"</table></td>*/"<td>" + list[i][4] + "</td>";
-				if(list[i][5] == 1) {
-					str += "<td><i class='fa fa-wheelchair'></i></td>";
-				} else {
-					str += "<td></td>";
-				}
-				str += "<td><a href='https://www.google.com/maps/place/" + list[i][7] + "+" + list[i][8] + "/@" + list[i][7] + "," + list[i][8] + ",15z' target='_blank'>" + list[i][6] + "</a></td></tr>";
-				$("#events").append(str);
+		$(".categories").addClass("overlay-categories");
+		var category = $(this).text();
+		setTimeout(function(){
+			
+		
+			for (i = 0; i < list.length; i++) { 
+				if(list[i][0] == category) {
+					$('.category-container').append('<p>' + list[i][1] + '</p>');
+					
+					var str = "<tr><td>" + list[i][1] + "</td>"
+					var str = "<tr><td>" + list[i][0] + "</td><td>" + list[i][1] + "</td><td><table class='table'>";
+					for (j = 0; j < list[i][2].length; j++) { 
+						var start = new Date(list[i][2][j] * 1000);
+						str += "<tr><th>" + weekday[start.getDay()] + " (" + start.getDate() + ")</th></th><td>" + list[i][3][j] + "</td>";
+					}
+					str += "</table></td><td>" + list[i][4] + "</td>";
+					if(list[i][5] == 1) {
+						str += "<td><i class='fa fa-wheelchair'></i></td>";
+					} else {
+						str += "<td></td>";
+					}
+					str += "<td><a href='https://www.google.com/maps/place/" + list[i][7] + "+" + list[i][8] + "/@" + list[i][7] + "," + list[i][8] + ",15z' target='_blank'>" + list[i][6] + "</a></td></tr>";
+					$("#events").append(str);
+					
 
+				}
 			}
-		}	 
-		$("#eventtab").text("Events (" + list.length + ")");
+			$(".categories").css("display", "none");	 
+			//$("#eventtab").text("Events (" + list.length + ")");
+		}, 1000);
 	});
 
 	function indexLookup(listt, name) {
@@ -45,6 +55,10 @@ $(document).ready(function () {
 		}
 
 		return -1;
+	}
+
+	function loaded(){
+		$(".overlay").addClass("overlay-loaded");
 	}
 
 	$.getJSON('json/gentsefeestenevents.json', function (data) {
@@ -96,6 +110,12 @@ $(document).ready(function () {
 			$(".categories").append("<li class='category-entry'><a href='#'>" + categories[i] + "</a></li>");
 		}
 
+		// sort rolstoel 
+		//list.sort(function(a, b){return b[5]-a[5]});
+
+		// sort title 
+		list.sort(function(a, b){return a[1].localeCompare(b[1])});
+		loaded();
 	});
 
 
