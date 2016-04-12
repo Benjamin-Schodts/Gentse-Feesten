@@ -5,35 +5,35 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 		<link rel="stylesheet" href="css/styles.min.css">
 		<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js"></script>
 		<script src="js/main.min.js"></script>
 	</head>
 	<body>
-		<div id="site-container">
-		    <header>.....</header>
-		    <div id="body">
-		    	<!--<button id="button1">Gather data</button>
-				<button id="button2">Show data</button>
-				<br>-->
-				<div id="movielist">
-					<div class="c-container">
-						<div class="c-logo" ></div>
-						<button class="c-left"><i class="fa fa-chevron-left"></i></button>
-						<button class="c-right"><i class="fa fa-chevron-right"></i></button>
-						<div class="c-category">
-							<p class="c-category-text"><i class="fa fa-circle-o-notch fa-spin"></i></p>
-						</div>
-						<div class="c-body">
-							<div class="c-title">
-								<p class="c-title-text"><i class="fa fa-circle-o-notch fa-spin"></i></p>
-							</div>
-						</div>
-						
-					</div>
-		    	</div>
-		    <footer class="menu">
-		    	<div id="menu-logo"></div>
-		    </footer>
+		<div id="myDiv" class="container"></div>
+		<div class="full">
+			<div id="about" class="container"></div>
+		</div>
+		<div class="container">
+			<a id="events"></a>
+			<h1>Zoek een Event</h1>
+			<div id="exposed filter" class="col-xs-12 col-md-2">
+				<select id="category-select">
+				  <option value="" disabled selected>Select a category</option>
+				</select>
+				<div id="categories"></div>
+				<select id="day-select">
+				  <option value="" disabled selected>Select a day</option>
+				</select>
+				<div id="days"></div>
+			</div>
+			
+
+			<div id="site-container" class="col-xs-12 col-md-10">
+
+			</div>
+
+
 		</div>
 	</body> 
 </html>
+

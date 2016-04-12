@@ -4,6 +4,8 @@ $(document).ready(function () {
 	var weekday = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"];
 	var month = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
 
+	$("#myDiv").load('../menu.html');
+
 	// Get a variable from URL
 	function getQueryVariable(variable) {
        var query = window.location.search.substring(1);
@@ -102,6 +104,14 @@ $(document).ready(function () {
 
 		// Gmap
 		$(".gmap").append('<iframe width="300" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q='+val.latitude+','+val.longitude+'&hl=es;z=14&amp;output=embed"></iframe>');
+	
+		if(window.matchMedia( "(max-width: 991px)" ).matches) {
+			$(".navbar-items").css("padding-left", function() { 
+			    return ($(".container").width() / 2) - 180;
+			});
+		} else {
+			$(".navbar-items").css("padding-left", 60);
+		}
 	}
 
 	// Flip see more and see less
@@ -121,6 +131,16 @@ $(document).ready(function () {
 		flipSee();
 	});
 
-	// Startup eventt
+	$(window).resize(function() {
+		if(window.matchMedia( "(max-width: 991px)" ).matches) {
+			$(".navbar-items").css("padding-left", function() { 
+			    return ($(".container").width() / 2) - 180;
+			});
+		} else {
+			$(".navbar-items").css("padding-left", 60);
+		}
+	});
+
+	// Startup event
 	getEvent();
 });
