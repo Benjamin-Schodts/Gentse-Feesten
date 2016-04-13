@@ -12,6 +12,9 @@ $(document).ready(function () {
 	$("#menu").load('../includes/menu.html');
 	$("#about").load('../includes/gentseFeesten.txt');
 
+	$("#menu").load('../dist/includes/menu.html');
+	$("#about").load('../dist/includes/gentseFeesten.txt');
+
 	getLocalStorage();
 
 	// Load JSON into array

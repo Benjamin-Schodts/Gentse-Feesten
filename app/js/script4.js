@@ -7,6 +7,8 @@ $(document).ready(function () {
 
 	$("#menu").load('../includes/menu.html');
 
+	$("#menu").load('../dist/includes/menu.html');
+
 	// Get a variable from URL
 	function getQueryVariable(variable) {
        var query = window.location.search.substring(1);
