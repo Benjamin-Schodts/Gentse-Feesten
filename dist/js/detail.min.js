@@ -5,7 +5,7 @@ $(document).ready(function () {
 	var month = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
 	var showtimes = [];
 
-	$("#myDiv").load('../menu.html');
+	$("#menu").load('/includes/menu.html');
 
 	// Get a variable from URL
 	function getQueryVariable(variable) {

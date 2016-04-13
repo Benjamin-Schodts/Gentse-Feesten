@@ -13,7 +13,7 @@ var git = require('gulp-git');
 
 gulp.task('build', function (callback) {
   runSequence('clean:dist', 
-    ['sass', 'useref', 'images', 'fonts', 'texts', 'json'],
+    ['sass', 'useref', 'images', 'fonts', 'includes', 'json'],
     callback
   )
 })
@@ -41,9 +41,9 @@ gulp.task('fonts', function() {
   .pipe(gulp.dest('dist/fonts'))
 })
 
-gulp.task('texts', function() {
-  return gulp.src('app/text/**/*')
-  .pipe(gulp.dest('dist/text'))
+gulp.task('includes', function() {
+  return gulp.src('app/includes/**/*')
+  .pipe(gulp.dest('dist/includes'))
 })
 
 gulp.task('images', function(){
