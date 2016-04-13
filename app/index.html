@@ -3,6 +3,7 @@
 		<title>Project</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
 		<!--build:css css/styles.min.css-->
 		<link href="css/styles.css" rel="stylesheet">
 		<!--endbuild-->
@@ -20,24 +21,26 @@
 		<div class="container">
 			<a id="events"></a>
 			<h1>Zoek een Event</h1>
-			<div id="exposed filter" class="col-xs-12 col-md-2">
+			<div id="exposed_filter" class="col-xs-12 col-md-2">
 				<select id="category-select">
-				  <option value="" disabled selected>Select a category</option>
+				  <option value="" disabled selected>Kies een categorie</option>
 				</select>
 				<div id="categories"></div>
 				<select id="day-select">
-				  <option value="" disabled selected>Select a day</option>
+				  <option value="" disabled selected>Kies een dag</option>
 				</select>
 				<div id="days"></div>
+				<span id="reset">Reset</span>
 			</div>
 			
 
-			<div id="site-container" class="col-xs-12 col-md-10">
+			<div id="event-list" class="col-xs-12 col-md-10">
 
 			</div>
 
 
 		</div>
+		<a href="#" class="scrollup" style="display: block;">Scroll</a>
 	</body> 
 </html>
 

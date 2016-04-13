@@ -1,8 +1,8 @@
 body {
-  margin: 0; }
+  margin: 0;
+  font-family: 'Montserrat', sans-serif; }
 
-#site-container {
-  min-height: 100%;
+#event-list {
   position: relative; }
 
 .category-container {
@@ -292,6 +292,22 @@ select:focus {
   margin-bottom: 25px;
   padding: 15px;
   text-align: justify; }
+
+.scrollup {
+  width: 40px;
+  height: 40px;
+  opacity: 1;
+  position: fixed;
+  bottom: 22px;
+  right: 20px;
+  display: none;
+  text-indent: -9999px;
+  background: url(../images/scroll-top-arrow.png) no-repeat left top;
+  z-index: 999; }
+
+#reset {
+  font-weight: bold;
+  cursor: pointer; }
 
 @media screen and (max-width: 991px) {
   .event-date-col {

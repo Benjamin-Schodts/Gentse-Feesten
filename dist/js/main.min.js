@@ -1,9 +1,10 @@
 $(document).ready(function () {
 
 	var jsonfile = 'json/gentsefeestenevents.json';
-	var tmplist = [];
 	var events = [];
 	var categories = [];
+	var chosen = [];
+	var chosenDays = [];
 	var weekday = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"];
 	var month = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
 	var days = {"17": "Zaterdag",  "18" : "Zondag", "19" : "Maandag", "20" : "Dinsdag", "21" : "Woensdag", "22" : "Donderdag", "23" : "Vrijdag", "24" : "Zaterdag", "25" : "Zondag", "26" : "Maandag", "27" : "Dinsdag"};
@@ -11,20 +12,23 @@ $(document).ready(function () {
 	$("#myDiv").load('../menu.html');
 	$("#about").load('../text/gentseFeesten.txt');
 
+	getLocalStorage();
+
 	// Load JSON into array
 	function loadJsonFull() {
+		var list = [];
 		$.getJSON(jsonfile, function (data) {
 	    	$.each(data, function(key,val){
-	    		tmplist.push(val);
+	    		list.push(val);
 	    	});	
-	    	tmplist.sort(function(a,b) { return a.datum - b.datum});
-	    	createEventList();
+	    	list.sort(function(a,b) { return a.datum - b.datum});
+	    	createEventList(list);
 		});
 	}
 
 	// Load the jsonfile
-	function createEventList() {
-    	$.each(tmplist, function(key,val){
+	function createEventList(list) {
+    	$.each(list, function(key,val){
 
     		// Fill category variable if a category is provided
     		var category = "";
@@ -69,13 +73,12 @@ $(document).ready(function () {
 			   		events[events.length-1][2].push(val.datum); // Push a new date into the event
 			   		events[events.length-1][3].push(new Array()); // Create a timetable
 			   		events[events.length-1][3][events[events.length-1][3].length-1].push(val.startuur); // push new starting hour into the timetable 
-			   		events[events.length-1][9].push(val.id);
+			   		events[events.length-1][9].push(val.id); // Push a new ID corresponding to the date
 			   	}
 			} 
 		});	
 		fill_category_list();
 		fill_days_list();
-
 		getEvent();
 	}
 
@@ -100,59 +103,21 @@ $(document).ready(function () {
 		for(var day in days) {
 			$("#day-select").append("<option value='" + day + "''>" + days[day] + " " + day + "</option>");
 		}
-		/*for (i = 0; i < days.length; i++) { 
-			$("#day-select").append("<option value='" + days[i] + "''>" + days[i] + "</option>");
-		}*/
-	}
-
-	// Fade-out into website homepage
-	function loaded(){
-		$(".overlay").addClass("overlay-loaded"); 
 	}
 
 	// Get event with ID provided by URL
 	function getEvent() {
-		$("#site-container").html("");
+		$("#event-list").html("");
 		var i = 0;
-		$.getJSON(jsonfile, function (data) {
-	    	$.each(events, function(key,val){
-	    		if(chosen.length == 0 && chosenDays.length == 0) {
-	    			if(val[0] == "Vuurwerk") {
-		    			if(i % 2) {
-		    				processEventInformation(val, "even");
-		    			} else {
-		    				processEventInformation(val, "uneven");
-		    			}
-		    			i++;
-		    		}
-	    		} else if (chosen.length != 0 && chosenDays != 0) {
-	    			
-	    			if(chosen.indexOf(val[0]) != -1) {
-	    				var found = false;
-	    				for (var x = 0; x < val[2].length && !found; x++) {
-	    					var dat = new Date(val[2][x] * 1000);
-			    			if (chosenDays.indexOf(dat.getDate().toString()) != -1) {
-			    				if(i % 2) {
-				    				processEventInformation(val, "even");
-				    			} else {
-				    				processEventInformation(val, "uneven");
-				    			}
-				    			i++;
-				    			found = true;
-		    				}
-	    				}
-		    		} 
-	    		} else if (chosen.length != 0) {
-		    		if (chosen.indexOf(val[0]) != -1) {
-	    				if(i % 2) {
-		    				processEventInformation(val, "even");
-		    			} else {
-		    				processEventInformation(val, "uneven");
-		    			}
-		    			i++;
-		    		} 
-	    		} else if (chosenDays.length != 0) {
-	    			var found = false;
+    	$.each(events, function(key,val){
+    		if(chosen.length == 0 && chosenDays.length == 0) {
+	    		$("#exposed_filter").removeClass("col-md-2");
+	    		$("#exposed_filter").addClass("col-md-12");
+    		} else if (chosen.length != 0 && chosenDays != 0) {
+    			if(chosen.indexOf(val[0]) != -1) {
+    				$("#exposed_filter").removeClass("col-md-12");
+	    			$("#exposed_filter").addClass("col-md-2");
+    				var found = false;
     				for (var x = 0; x < val[2].length && !found; x++) {
     					var dat = new Date(val[2][x] * 1000);
 		    			if (chosenDays.indexOf(dat.getDate().toString()) != -1) {
@@ -165,9 +130,36 @@ $(document).ready(function () {
 			    			found = true;
 	    				}
     				}
-	    		}
-	    	});	
-	    });	
+	    		} 
+    		} else if (chosen.length != 0) {
+	    		if (chosen.indexOf(val[0]) != -1) {
+	    			$("#exposed_filter").removeClass("col-md-12");
+	    			$("#exposed_filter").addClass("col-md-2");
+    				if(i % 2) {
+	    				processEventInformation(val, "even");
+	    			} else {
+	    				processEventInformation(val, "uneven");
+	    			}
+	    			i++;
+	    		} 
+    		} else if (chosenDays.length != 0) {
+    			$("#exposed_filter").removeClass("col-md-12");
+	    		$("#exposed_filter").addClass("col-md-2");
+    			var found = false;
+				for (var x = 0; x < val[2].length && !found; x++) {
+					var dat = new Date(val[2][x] * 1000);
+	    			if (chosenDays.indexOf(dat.getDate().toString()) != -1) {
+	    				if(i % 2) {
+		    				processEventInformation(val, "even");
+		    			} else {
+		    				processEventInformation(val, "uneven");
+		    			}
+		    			i++;
+		    			found = true;
+    				}
+				}
+    		}
+    	});	
 	}
 
 	function createElement(type, content, classes) {
@@ -186,15 +178,19 @@ $(document).ready(function () {
 
 	// Trim val to a certain length
 	function trim(val, length) {
-		var nohtml = strip(val);
-		var trimmedString = nohtml.substr(0, length);
-		if (trimmedString.indexOf(".") == -1) {
-			return trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" "))) + " ...";
+		if (val.length > length) {
+			var nohtml = strip(val);
+			var trimmedString = nohtml.substr(0, length);
+			if (trimmedString.indexOf(".") == -1) {
+				return trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" "))) + " ...";
+			} else {
+				return trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf("."))) + ".";
+			}
 		} else {
-			return trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf("."))) + ".";
+			return val;
 		}
+		
 	}
-
 	
 	function getDetails(val) {
 		var details = createElement("div", null, "event-details col-xs-12");
@@ -226,16 +222,29 @@ $(document).ready(function () {
 		var dates = createElement("div", createElement("span", null, "event-other-dates-label"), "event-other-dates col-xs-12 col-md-8");
 		if (val[2].length > 1) {
 			dates = createElement("div", createElement("span", "Andere dagen: ", "event-other-dates-label"), "event-other-dates col-xs-12 col-md-8");
-			for (var i = 1; i < val[2].length; i++) {
+			for (var i = 0; i < val[2].length; i++) {
 				var datum = new Date(val[2][i] * 1000);
-				$(dates).append(createElement("span", "<a href='detail.html?id=" + val[9][i] + "'>" + datum.getDate() + "</a>", "event-other-date"));
+				if (datum.getDate() != chosenDays[0]) {
+					$(dates).append(createElement("span", "<a href='detail.html?id=" + val[9][i] + "'>" + datum.getDate() + "</a>", "event-other-date"));
+				}
 			}
 		}
 		return $(dates);
 	}
 
 	function processEventInformation(val, rank) {
-		var datum = new Date(val[2][0] * 1000);
+		var datum, found = false;
+		if (chosenDays.length > 0) {
+			for (var i = 0; i < val[2].length && !found; i++) {
+				var tempDate = new Date(val[2][i] * 1000);
+				if (tempDate.getDate() == chosenDays[0]) {
+					datum = tempDate;
+					found = true;
+				}
+			}
+		} else {
+			datum = new Date(val[2][0] * 1000);
+		}
 		var container = createElement("div", null, "row event " + rank);
 		var left = createElement("div", null, "event-left col-xs-12 col-md-2")
 			.append(createElement("div", null, "event-date-col col-xs-12")
@@ -245,7 +254,7 @@ $(document).ready(function () {
 				.append(createElement("div", weekday[datum.getDay()] + " " + datum.getDate() + " " + month[datum.getMonth()] + " " + datum.getFullYear(), "event-date-row col-xs-12"));
 			
 		var right = createElement("div", null, "event-right col-xs-12 col-md-10")
-			.append(createElement("div", "<a href='detail.html?id=" + val[9][0] + "'>" + val[1] + "</a>", "event-title col-xs-12"))
+			.append(createElement("div", "<a href='detail.html?id=" + val[9][0] + "'>" + trim(strip(val[1]), 50) + "</a>", "event-title col-xs-12"))
 			.append(getDetails(val))
 			.append(createElement("div", trim(val[11], 200), "event-description col-xs-12"))
 			.append(createElement("div", null, "event-extra col-xs-12")
@@ -254,7 +263,7 @@ $(document).ready(function () {
 
 		$(container).append(left).append(right);
 
-		$("#site-container").append(container);
+		$("#event-list").append(container);
 		$(".event-date-col").css("height", $(this).parent().css("height"));
 		$(".event-left").css("height", $(this).parent().css("height"));
 		$(".event-right").css("height", $(this).parent().css("height"));
@@ -280,13 +289,6 @@ $(document).ready(function () {
 		}
 	});
 
-
-
-
-
-	var chosen = [];
-	var chosenDays = []
-
 	$("#category-select").change(function(){
 	    addCategory();
 	});
@@ -298,6 +300,7 @@ $(document).ready(function () {
 	function addCategory() {
 	    if (chosen.indexOf($("#category-select").val()) == -1) {
 	        chosen.push($("#category-select").val());
+	        setLocalStorage();
 	        generateCategoryList();
 	    }
 	    $("#category-select").val($("#category-select option:first").val());
@@ -306,6 +309,7 @@ $(document).ready(function () {
 	function addDay() {
 	    if (chosenDays.indexOf($("#day-select").val()) == -1) {
 	        chosenDays.push($("#day-select").val());
+	        setLocalStorage();
 	        generateDayList();
 	    }
 	    $("#day-select").val($("#day-select option:first").val());
@@ -336,12 +340,61 @@ $(document).ready(function () {
 
 	$("#categories").on("click", ".cat", function() {
 	    chosen.splice(chosen.indexOf($(this).html()), 1);
+	    setLocalStorage();
 	    generateCategoryList();
 	});
 
 	$("#days").on("click", ".cat", function() {
 		chosenDays.splice(chosenDays.indexOf($(this).html().split(" ")[1]), 1);
+		setLocalStorage();
 		generateDayList();
+	});
+
+	$('.scrollup').click(function(){
+		$("html, body").animate({ scrollTop: 600 }, 500);
+		return false;
+	});
+
+	$(window).scroll(function(){
+		if ($(this).scrollTop() > 700) {
+			$('.scrollup').fadeIn();
+		} else {
+			$('.scrollup').fadeOut();
+		}
+	});
+
+	function setLocalStorage() {
+		localStorage.savedChosen = JSON.stringify(chosen);
+		localStorage.savedChosenDays = JSON.stringify(chosenDays);
+	}
+
+	function getLocalStorage() {
+		if (localStorage.savedChosen) {
+			
+           chosen = JSON.parse(localStorage.savedChosen);
+           generateCategoryList();
+        } else {
+        	chosen = [];
+        }
+        if (localStorage.savedChosenDays) {
+           chosenDays = JSON.parse(localStorage.savedChosenDays);
+           generateDayList();
+        } else {
+        	chosenDays = [];
+        }
+	}
+
+	function resetStorage() {
+		localStorage.clear();
+	}
+
+	$("#reset").click(function() {
+		localStorage.removeItem("savedChosen");
+		localStorage.removeItem("savedChosenDays");
+		localStorage.clear();
+		getLocalStorage();
+		generateDayList();
+		generateCategoryList();
 	});
 
 	loadJsonFull();

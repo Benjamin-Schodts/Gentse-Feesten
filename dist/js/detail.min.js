@@ -3,6 +3,7 @@ $(document).ready(function () {
 	var jsonfile = 'json/gentsefeestenevents.json';
 	var weekday = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"];
 	var month = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
+	var showtimes = [];
 
 	$("#myDiv").load('../menu.html');
 
@@ -30,13 +31,29 @@ $(document).ready(function () {
 	function getEvent() {
 		$.getJSON(jsonfile, function (data) {
 	    	$.each(data, function(key,val){
-	    		if(val.id == getQueryVariable("id")) {
-	    			processEventInformation(val);
+	    		if (val.id == getQueryVariable("id")) {
+	    			getShowtimes(val);
 	    			return false;
 	    		}
 	    	});	
 	    	return false;
 	    });	
+	}
+
+	function getShowtimes(event) {
+		var datum = new Date(event.datum * 1000);
+		$.getJSON(jsonfile, function (data) {
+	    	$.each(data, function(key,val){
+	    		if (val.activiteit_id == event.activiteit_id && val.startuur != false) {
+	    			var foundDate = new Date(val.datum * 1000);
+	    			if (datum.getDate() == foundDate.getDate()) {
+	    				showtimes.push(val.startuur);
+	    			}
+	    		}
+    		});	
+    		processEventInformation(event);
+    	});	
+
 	}
 
 	// Process and event and print the specified values
@@ -48,7 +65,15 @@ $(document).ready(function () {
 		// Detail-left
 		var datum = new Date(val.datum * 1000);
 		$(".date").append(weekday[datum.getDay()] + " " + datum.getDate() + " " + month[datum.getMonth()] + " " + datum.getFullYear());
-		$(".time").append(val.startuur);
+		//$(".time").append(val.startuur);
+		for (var i = 0; i < showtimes.length; i++) {
+			if (i == 0) {
+				$(".time").append(showtimes[i]);
+			} else {
+				$(".time").append(", " + showtimes[i]);
+			}
+		}
+
 		if (val.omschrijving != false && val.omschrijving != "" && val.omschrijving.length > 0) {
 			$(".description").append(strip(val.omschrijving));
 			if (val.meer_info != false && val.meer_info != "" && val.meer_info.length > 0) {
@@ -143,4 +168,5 @@ $(document).ready(function () {
 
 	// Startup event
 	getEvent();
+
 });
