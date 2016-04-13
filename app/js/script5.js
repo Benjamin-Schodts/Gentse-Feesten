@@ -9,11 +9,8 @@ $(document).ready(function () {
 	var month = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
 	var days = {"17": "Zaterdag",  "18" : "Zondag", "19" : "Maandag", "20" : "Dinsdag", "21" : "Woensdag", "22" : "Donderdag", "23" : "Vrijdag", "24" : "Zaterdag", "25" : "Zondag", "26" : "Maandag", "27" : "Dinsdag"};
 
-	$("#menu").load('../includes/menu.html');
-	$("#about").load('../includes/gentseFeesten.txt');
-
-	$("#menu").load('../dist/includes/menu.html');
-	$("#about").load('../dist/includes/gentseFeesten.txt');
+	$("#menu").load('includes/menu.html');
+	$("#about").load('includes/gentseFeesten.txt');
 
 	getLocalStorage();
 
