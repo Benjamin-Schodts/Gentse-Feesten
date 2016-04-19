@@ -5,6 +5,9 @@ body {
 #event-list {
   position: relative; }
 
+#exposed_filter {
+  margin-bottom: 25px; }
+
 .category-container {
   background: #be0000;
   padding: 15px;
@@ -143,7 +146,8 @@ Index3.html
   margin-bottom: 25px;
   -webkit-box-shadow: 10px 10px 35px -5px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 10px 10px 35px -5px rgba(0, 0, 0, 0.75);
-  box-shadow: 10px 10px 35px -5px rgba(0, 0, 0, 0.75); }
+  box-shadow: 10px 10px 35px -5px rgba(0, 0, 0, 0.75);
+  border-left: 10px solid #bd0b15; }
 
 .event.even {
   background: #fff; }
@@ -171,12 +175,10 @@ Index3.html
 
 .uneven .event-left {
   background: #ec0e1a;
-  border-left: 10px solid #bd0b15;
   color: #fff; }
 
 .even .event-left {
   background: #fff;
-  border-left: 10px solid #bd0b15;
   color: #000; }
 
 .event-day-name {
@@ -220,7 +222,8 @@ Index3.html
   margin-right: 10px; }
 
 .event-description {
-  margin: 0 0 10px 0; }
+  margin: 0 0 10px 0;
+  padding-bottom: 25px; }
 
 .cat {
   padding: 5px;
@@ -309,7 +312,50 @@ select:focus {
   font-weight: bold;
   cursor: pointer; }
 
+#reset:hover {
+  color: #ec0e1a; }
+
+.favourite-link {
+  font-weight: bold;
+  cursor: pointer;
+  color: #333;
+  text-decoration: none; }
+
+.favourite-link:hover {
+  text-decoration: none;
+  color: #ec0e1a; }
+
+.favourite-link:active {
+  text-decoration: none;
+  color: #333; }
+
+.remove-favourite {
+  font-weight: bold;
+  cursor: pointer;
+  color: #333;
+  text-decoration: none; }
+
+.remove-favourite:hover {
+  color: #ec0e1a;
+  text-decoration: none; }
+
+.event-favourite {
+  position: absolute;
+  top: 5px;
+  right: 0; }
+
+.favourite {
+  color: #000;
+  cursor: pointer;
+  font-size: 20px;
+  margin-left: 20px; }
+
+.favourited {
+  color: #ec0e1a; }
+
 @media screen and (max-width: 991px) {
+  .event {
+    border-left: none; }
   .event-date-col {
     display: none; }
   .event-date-row {
@@ -317,6 +363,8 @@ select:focus {
     text-align: center;
     padding: 15px;
     font-size: 20px; }
+  .event-left {
+    border-left: 10px solid #bd0b15; }
   .detail {
     display: block;
     margin: 5px 0 5px 0; }
@@ -326,3 +374,22 @@ select:focus {
     text-align: center; }
   .menu-container {
     height: 50px; } }
+
+.printable-event {
+  margin-bottom: 25px;
+  border-bottom: 1px solid #000; }
+
+.printable-event h1 {
+  font-size: 20px; }
+
+.print-btn {
+  background-color: #ec0e1a;
+  color: #fff; }
+
+@media print {
+  .navbar {
+    display: none; }
+  .remove-favourite {
+    display: none; }
+  .print-btn {
+    display: none; } }

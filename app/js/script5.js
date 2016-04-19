@@ -5,11 +5,11 @@ $(document).ready(function () {
 	var categories = [];
 	var chosen = [];
 	var chosenDays = [];
+	var favourited = [];
 	var weekday = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"];
 	var month = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
 	var days = {"17": "Zaterdag",  "18" : "Zondag", "19" : "Maandag", "20" : "Dinsdag", "21" : "Woensdag", "22" : "Donderdag", "23" : "Vrijdag", "24" : "Zaterdag", "25" : "Zondag", "26" : "Maandag", "27" : "Dinsdag"};
 
-$("#menu").load('dist/includes/menu.html');
 	$("#menu").load('includes/menu.html');
 	$("#about").load('includes/gentseFeesten.txt');
 
@@ -260,7 +260,14 @@ $("#menu").load('dist/includes/menu.html');
 			.append(createElement("div", trim(val[11], 200), "event-description col-xs-12"))
 			.append(createElement("div", null, "event-extra col-xs-12")
 				.append(getDates(val))
-				.append(createElement("div", "<a href='detail.html?id=" + val[9][0] + "' class='pull-right'>Lees verder</a>", "event-read-more col-xs-12 col-md-4")));
+				.append(createElement("div", "<a href='detail.html?id=" + val[9][0] + "' class='pull-right'>Lees verder</a>", "event-read-more col-xs-12 col-md-4")))
+
+			if (JSON.stringify(favourited).indexOf(val[9][0]) > -1) {
+				right.append(createElement("div", '<i class="fa fa-star favourite favourited" aria-hidden="true" title="Verwijderen uit favorieten" data-id="' + val[9][0] + '"></i>', "event-favourite"));
+			} else {
+				right.append(createElement("div", '<i class="fa fa-star-o favourite" aria-hidden="true" title="Toevoegen aan favorieten" data-id="' + val[9][0] + '"></i>', "event-favourite"));
+			}
+			
 
 		$(container).append(left).append(right);
 
@@ -367,6 +374,7 @@ $("#menu").load('dist/includes/menu.html');
 	function setLocalStorage() {
 		localStorage.savedChosen = JSON.stringify(chosen);
 		localStorage.savedChosenDays = JSON.stringify(chosenDays);
+		localStorage.favourited = JSON.stringify(favourited);
 	}
 
 	function getLocalStorage() {
@@ -377,27 +385,48 @@ $("#menu").load('dist/includes/menu.html');
         } else {
         	chosen = [];
         }
+
         if (localStorage.savedChosenDays) {
            chosenDays = JSON.parse(localStorage.savedChosenDays);
            generateDayList();
         } else {
         	chosenDays = [];
         }
+
+        if (localStorage.favourited) {
+           favourited = JSON.parse(localStorage.favourited);
+        } else {
+        	favourited = [];
+        }
 	}
 
 	function resetStorage() {
-		localStorage.clear();
 	}
 
 	$("#reset").click(function() {
 		localStorage.removeItem("savedChosen");
 		localStorage.removeItem("savedChosenDays");
-		localStorage.clear();
 		getLocalStorage();
 		generateDayList();
 		generateCategoryList();
 	});
 
+	$("html").on("click", ".favourite", function() {
+		if (favourited.indexOf($(this).data("id")) == -1) {
+			favourited.push($(this).data("id"));
+	    	setLocalStorage();
+	    	$(this).addClass("fa-star favourited");
+			$(this).removeClass("fa-star-o");
+		} else {
+			favourited.splice(favourited.indexOf($(this).data("id")), 1);
+			setLocalStorage();
+			$(this).addClass("fa-star-o");
+			$(this).removeClass("fa-star favourited");
+		}
+	});
+
 	loadJsonFull();
+
+
 
 });

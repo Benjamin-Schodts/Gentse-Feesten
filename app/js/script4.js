@@ -4,6 +4,9 @@ $(document).ready(function () {
 	var weekday = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"];
 	var month = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
 	var showtimes = [];
+	var favourited = [];
+
+	getLocalStorage();
 
 	$("#menu").load('includes/menu.html');
 
@@ -137,6 +140,12 @@ $(document).ready(function () {
 		} else {
 			$(".navbar-items").css("padding-left", 60);
 		}
+
+		if (JSON.stringify(favourited).indexOf(val.id) > -1) {
+			$('.date').append('<i class="fa fa-star favourite favourited" aria-hidden="true" title="Verwijderen uit favorieten" data-id="' + val.id + '"></i>');
+		} else {
+			$('.date').append('<i class="fa fa-star-o favourite" aria-hidden="true" title="Toevoegen aan favorieten" data-id="' + val.id + '"></i>');
+		}
 	}
 
 	// Flip see more and see less
@@ -163,6 +172,32 @@ $(document).ready(function () {
 			});
 		} else {
 			$(".navbar-items").css("padding-left", 60);
+		}
+	});
+
+	function setLocalStorage() {
+		localStorage.favourited = JSON.stringify(favourited);
+	}
+
+	function getLocalStorage() {
+        if (localStorage.favourited) {
+           favourited = JSON.parse(localStorage.favourited);
+        } else {
+        	favourited = [];
+        }
+	}
+
+	$("html").on("click", ".favourite", function() {
+		if (favourited.indexOf($(this).data("id")) == -1) {
+			favourited.push($(this).data("id"));
+	    	setLocalStorage();
+	    	$(this).addClass("fa-star favourited");
+			$(this).removeClass("fa-star-o");
+		} else {
+			favourited.splice(favourited.indexOf($(this).data("id")), 1);
+			setLocalStorage();
+			$(this).addClass("fa-star-o");
+			$(this).removeClass("fa-star favourited");
 		}
 	});
 
