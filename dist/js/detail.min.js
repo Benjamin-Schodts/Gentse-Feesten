@@ -278,9 +278,13 @@
 			});
 		}
 
-		$scope.hasEvents = function(e) {
-			console.log(e.length);
-			return (e.length > 0);
+		$scope.hasFavourites = function() {
+			for (var i = 0; i < $scope.events.length; i++) {
+				if ($scope.events[i].favourite) {
+					return true;
+				}
+			}
+			return false;
 		}
 	});
 
