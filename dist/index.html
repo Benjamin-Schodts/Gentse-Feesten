@@ -1,46 +1,195 @@
-<html>
+<html ng-app="detail" scroll>
 	<head>
-		<title>Gentse Feesten 2015</title>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-		<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+		<title>Gentse Feesten</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat" type="text/css">
 		<link rel="stylesheet" href="css/styles.min.css">
 		<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js"></script>
-		<script src="js/main.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+		<script src="js/detail.min.js"></script>
 	</head>
-	<body>
-		<div id="menu" class="container"></div>
-		<div class="full">
-			<div id="about" class="container"></div>
-		</div>
-		<div class="container">
-			<a id="events"></a>
-			<h1>Zoek een Event</h1>
-			<div id="exposed_filter" class="col-xs-12 col-md-2">
-				<select id="category-select">
-				  <option value="" disabled selected>Kies een categorie</option>
-				</select>
-				<div id="categories"></div>
-				<select id="day-select">
-				  <option value="" disabled selected>Kies een dag</option>
-				</select>
-				<div id="days"></div>
-				<div class="controls">
-					<span id="reset">Reset</span>
-					<br/>
-					<a class="favourite-link" href="/favourites.html">Favorieten</a>
+	<body ng-controller="EventsController as em">
+		<div id="site-container" ng-controller="TabController as tab">
+			<header id="menu" class="container">
+				<div clas="container" id="menu">
+					<div class="navbar">
+						<div class="section">
+							<div class="logo-container col-xs-12 col-md-3">
+								<a href="index.html"><img id="logo" src="../images/gentsefeesten logo.png" /></a>
+							</div>
+							<div class="menu-container col-xs-12 col-md-9">
+								<ul class="navbar-items">
+									<li class="navbar-item"><a ng-click="tab.setTab(1)">Events</a></li>
+									<li class="navbar-item"><a ng-click="tab.setTab(3)">Favorieten</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-			
+			</header>
+			<a id="content"></a>		
+			<section id="tab1"  ng-show="tab.isSet(1)">
+				<section class="full">
+					<div id="about" class="container" ng-include="'includes/gentseFeesten.txt'"></div>
+				</section>
+				<section class="container">
+					<a id="events"></a>
+					<h1>Zoek een Event</h1>
+					<div id="exposed_filter" class="col-xs-12">
+						<select id="category-select" ng-model="search.categorie">
+						  <option value="" disabled selected>Kies een categorie</option>
+						</select>
+						<select id="day-select" ng-model="search.date">
+						  <option value="" disabled selected>Kies een dag</option>
+						</select>
+					</div>
+					<div id="event-list" class="col-xs-12">
+						<div class="row event" ng-repeat="event in events | byFilter:search" ng-class="{ even: $even, uneven: $odd }">
+							<div class="event-left col-xs-12 col-md-2">
+								<div class="event-date-col col-xs-12">
+									<div class="event-day-name">
+									{{getEventDayName(event, search.date)}}
+									</div>
+									<div class="event-day-number">
+									{{getEventDayNumber(event, search.date)}}
+									</div>
+									<div class="event-month-year">
+									{{getEventMonthYear(event, search.date)}}
+									</div>
+								</div>
+								<div class="event-date-row col-xs-12">
+								{{getEventFullDate(event, search.date)}} 
+								</div>
+							</div>
+							<div class="event-right col-xs-12 col-md-10">
+								<div class="event-title col-xs-12">
+									<a ng-click="getSingleEvent(indexLookup('activiteit', event.activiteit), search.date); tab.setTab(2)"> {{trim(strip(event.titel), 50)}}</a>
+								</div>
+								<div class="event-detail col-xs-12">
+									<span class="price" ng-show="event.prijs"><i class="fa fa-tag"></i>{{event.prijs | currency: "€"}}</span>
+									<span class="price" ng-show="event.prijs_omschrijving"><i class="fa fa-tag"></i>{{event.prijs_omschrijving}}</span>
+									<span class="price" ng-show="event.vvk"><i class="fa fa-tags"></i>{{event.vvk | currency: "€"}}</span>
+									<span class="price" ng-show="event.vvko"><i class="fa fa-tags"></i>{{event.vvko}}</span>
+									<span class="location" ng-show="event.locatie"><i class="fa fa-location-arrow"></i>{{event.locatie}}</span>
+									<span class="handicap" ng-show="event.handicap"><i class="fa fa-wheelchair"></i>Ja</span>
+								</div>
+								<div class="event-description col-xs-12" ng-show="event.omschrijving">
+								{{trim(strip(event.omschrijving, 200))}} 
+								</div>
+								<div class="event-extra col-xs-12">
+									<div class="event-other-dates col-xs-12 col-md-8">
+										<span ng-hide="hasNoOtherDates(event)">Andere dagen: </span><a ng-repeat="day in event.datez" ng-hide="isCurrentDate(day.datum, search.date, event.datez)" ng-click="getSingleEvent(indexLookup('activiteit', event.activiteit), day.datum); tab.setTab(2)">{{transformToDate(day.datum)}}
+										</a>
+									</div>
+									<div class="event-read-more col-xs-12 col-md-4">
+									<a ng-click="getSingleEvent(indexLookup('activiteit', event.activiteit), search.date); tab.setTab(2)" class="pull-right">Lees verder</a> 
+									</div>
+								</div>
+								<div class="event-favourite"><i class="fa favourite" ng-class="isFavourited(event)" aria-hidden="true" ng-click="flipFavourite(event, search.date)"></i></div>
+							</div>
+						</div>
+					</div>	
+				</section>
+			</section>
+			<section id="tab2" ng-show="tab.isSet(2)">
 
-			<div id="event-list" class="col-xs-12 col-md-10">
+				<div id="detail-container" class="container node">
+					<div class="row name-container">
+						<h1 class="" ng-click="getSingleEvent(627)">{{singleEvent.e.titel}}</h1>
+					</div>
+					<div class="row details">
+						<div class="col-xs-12 col-md-7 detail-left">
+							<div class="col-xs-12 datetime">
+								<p class="date"><i class="fa fa-calendar"></i>
+									{{singleEvent.datumFull}}
+									<span class="event-favourite"><i class="fa favourite" ng-class="isFavourited(singleEvent.e)" aria-hidden="true" ng-click="flipFavourite(singleEvent.e, search.date)"></i></span>
+								</p>
 
-			</div>
+								<p class="time"><i class="fa fa-clock-o">{{}}</i>{{singleEvent.timetable}}</p>
+							</div>
+							<div class="col-xs-12 description">
+							{{singleEvent.e.omschrijving}}
+							</div>
+							<div class="col-xs-12 extra">
+							{{}}
+							</div>
+						</div>
+						<div class="col-xs-12 col-md-5 detail-right">
+							<p class="price" ng-show="singleEvent.e.prijs"><i class="fa fa-tag"></i>{{singleEvent.e.prijs | currency: "€"}}</p>
+							<p class="price" ng-show="singleEvent.e.prijs_omschrijving"><i class="fa fa-tag"></i>{{singleEvent.e.prijs_omschrijving}}</p>
+							<p class="price" ng-show="singleEvent.e.vvk"><i class="fa fa-tags"></i>{{singleEvent.e.vvk | currency: "€"}}</p>
+							<p class="price" ng-show="singleEvent.e.vvko"><i class="fa fa-tags"></i>{{singleEvent.e.vvko}}</p>
+							<p class="price" ng-show="singleEvent.e.korting"><i class="fa fa-star"></i>Korting voor: {{singleEvent.e.korting.toString()}}</p>
+							<p class="location" ng-show="singleEvent.e.locatie"><i class="fa fa-location-arrow"></i>{{singleEvent.e.locatie}}</p>
+							<p class="address">
+								<i class="fa fa-map-marker"></i>
+								<span ng-show="singleEvent.e.straat">{{singleEvent.e.straat}}</span>
+								<span ng-show="singleEvent.e.huisnummer">{{singleEvent.e.huisnummer}}</span>
+								<span ng-show="singleEvent.e.postcode">, {{singleEvent.e.postcode}}</span>
+								<span ng-show="singleEvent.e.gemeente">{{singleEvent.e.gemeente}}</span>
+							</p>
+							<p class="handicap" ng-show="singleEvent.e.handicap"><i class="fa fa-wheelchair"></i>{{singleEvent.e.handicap}}</p>
+						</div>
+					</div>
+					<div class="row scene" id="scene">
 
+					</div>
+					<div class="row gmap">
 
+					</div>
+				</div>
+			</section>
+			<section id="tab3"  ng-show="tab.isSet(3)">
+				<section class="container">
+					<div id="favourites-list" class="col-xs-12">
+						<p ng-hide="hasFavourites()">Je hebt nog geen favorieten gekozen</p>
+						<div class="row" ng-repeat="event in events | filter:{favourite:true}">
+							<div class="col-xs-12 p-name-container">
+								<h4>{{event.titel}}</h4>
+							</div>
+							<div class="col-xs-12 p-description">
+							{{strip(event.omschrijving)}}
+							</div>
+							<div class="col-xs-12 p-timetable">
+								<table>
+									<tr>
+										<th>Datum</th>
+										<th ng-repeat="day in event.datez">
+										{{getEventDayNumber(event, day.datum)}}
+										</th>
+									</tr>
+									<tr>
+										<td>Tijdstip</td>
+										<td ng-repeat="day in event.datez">
+										{{event.dates[day.datum].starturen.toString()}}
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="col-xs-12 col-md-5 p-detail">
+								<p class="p-price" ng-show="event.prijs"><strong>Prijs: </strong>{{event.prijs | currency: "€"}}</p>
+								<p class="p-price" ng-show="event.prijs_omschrijving"><strong>Prijs Omschrijving: </strong>{{event.prijs_omschrijving}}</p>
+								<p class="p-price" ng-show="event.vvk"><strong>Voorverkoop: </strong>{{event.vvk | currency: "€"}}</p>
+								<p class="p-price" ng-show="event.vvko"><strong>Voorverkoop omschrijving: </strong>{{event.vvko}}</p>
+								<p class="p-price" ng-show="event.korting"><strong>Korting voor: </strong>{{event.korting.toString()}}</p>
+								<p class="p-location" ng-show="event.locatie"><strong>Locatie: </strong>{{event.locatie}}</p>
+								<p class="p-address">
+									<strong>Adres: </strong>
+									<span ng-show="event.straat">{{event.straat}}</span>
+									<span ng-show="event.huisnummer">{{event.huisnummer}}</span>
+									<span ng-show="event.postcode">, {{event.postcode}}</span>
+									<span ng-show="event.gemeente">{{event.gemeente}}</span>
+								</p>
+								<p class="p-handicap" ng-show="event.handicap"><i class="fa fa-wheelchair"></i>Ja</p>
+							</div>
+						</div>
+					</div>	
+				</section>
+			</section>
 		</div>
-		<a href="#" class="scrollup" style="display: block;">Scroll</a>
+		<a class="scrollup" style="display: block;" ng-click="scrollTop()">Scroll</a>
 	</body> 
 </html>
-
